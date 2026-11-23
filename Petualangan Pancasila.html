@@ -1,0 +1,542 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Petualangan Pancasila</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Konsep: petualangan 6 "pos" bersama maskot Garuda Kecil. Satu kartu soal di tengah, umpan balik langsung dari maskot. Tema ceria merah dan emas, sengaja satu tema (cerah). */
+:root{
+  --red:#D4202E; --red-deep:#8F111E; --red-soft:#FDE4E1;
+  --gold:#F6B90B; --gold-deep:#B97B00; --gold-soft:#FFE9A8;
+  --ink:#3F1219; --muted:#7A4B50; --paper:#FFF6EF; --card:#FFFFFF; --line:#F1D3CE;
+  --font-display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --font-body:'Nunito','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 40px; margin:0;
+  background-image:radial-gradient(circle at 12% 18%,rgba(246,185,11,.16) 0 90px,transparent 91px),radial-gradient(circle at 92% 70%,rgba(212,32,46,.10) 0 120px,transparent 121px);
+  background-attachment:fixed;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--red-deep)}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.2}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));background:linear-gradient(180deg,var(--red) 0,var(--red-deep) 100%);color:#fff;box-shadow:0 4px 0 var(--gold)}
+.top-in{max-width:760px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.brand{font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:.2px;display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand svg{flex:none}
+.score{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);padding:4px 12px;border-radius:999px;font-weight:800;font-variant-numeric:tabular-nums}
+.tgl{border:2px solid rgba(255,255,255,.55);background:transparent;color:#fff;border-radius:999px;padding:4px 12px;font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:6px;min-height:36px}
+.tgl[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.prog{flex-basis:100%;height:12px;background:rgba(0,0,0,.28);border-radius:999px;overflow:hidden}
+.prog>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#FFD84D);border-radius:999px;transition:width .5s cubic-bezier(.3,1.4,.5,1)}
+
+main{padding-top:20px}
+
+/* home */
+.hero{background:linear-gradient(160deg,var(--red) 0,var(--red-deep) 100%);color:#fff;border-radius:28px;padding:24px 22px 26px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;box-shadow:0 8px 0 var(--gold-deep)}
+.hero h1{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:700}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{margin:8px 0 0;opacity:.95}
+.sila-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.sila-row span{width:54px;height:54px;border-radius:50%;background:var(--red-deep);border:3px solid var(--gold);display:grid;place-items:center}
+.panel{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:20px;margin-top:20px}
+.panel h2{font-size:1.25rem;margin-bottom:10px}
+label.f{display:block;font-weight:800;margin-bottom:6px}
+.inp{width:100%;font:inherit;padding:12px 14px;border:3px solid var(--line);border-radius:16px;background:#fff;color:var(--ink);min-height:48px}
+.inp:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 4px var(--gold-soft)}
+textarea.inp{min-height:130px;resize:vertical}
+.btn{border:0;border-radius:18px;padding:13px 24px;font-family:var(--font-display);font-weight:600;font-size:1.1rem;min-height:50px;transition:transform .15s,box-shadow .15s}
+.btn-gold{background:var(--gold);color:var(--ink);box-shadow:0 5px 0 var(--gold-deep)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--gold-deep)}
+.btn-gold:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold-deep)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 5px 0 var(--red-deep)}
+.btn-red:hover{transform:translateY(-2px)}
+.btn-red:active{transform:translateY(3px);box-shadow:0 2px 0 var(--red-deep)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn-line{background:#fff;border:3px solid var(--line);color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:10px}
+.stg{text-align:left;background:var(--paper);border:3px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;transition:transform .15s,border-color .15s}
+.stg:hover{transform:translateY(-3px);border-color:var(--gold)}
+.stg b{font-family:var(--font-display);font-size:1.02rem}
+.stg small{color:var(--muted);font-weight:600}
+
+/* question */
+.qhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.badge{background:var(--gold);color:var(--ink);font-family:var(--font-display);font-weight:600;border-radius:999px;padding:5px 14px;font-size:.95rem}
+.qno{font-weight:800;color:var(--red-deep);font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:3px solid var(--line);border-radius:26px;padding:22px 20px;box-shadow:0 6px 0 var(--line);animation:rise .4s ease both}
+.ctx{background:var(--gold-soft);border-left:8px solid var(--gold);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-style:italic}
+.pic{display:flex;justify-content:center;margin:0 0 14px}
+.pic svg{max-width:100%;height:auto;border-radius:18px}
+.qtext{font-size:1.28rem;font-weight:600;margin-bottom:16px;overflow-wrap:anywhere}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:3px solid var(--line);border-radius:18px;padding:11px 14px;min-height:54px;font-weight:700;transition:transform .15s,border-color .15s,background .15s;overflow-wrap:anywhere}
+.opt:hover:not([disabled]){transform:translateY(-2px) scale(1.01);border-color:var(--gold)}
+.opt .l{flex:none;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-weight:700}
+.opt .t{padding-top:3px}
+.opt.sel{border-color:var(--red);background:var(--red-soft)}
+.opt.ok{background:var(--gold-soft);border-color:var(--gold);box-shadow:0 0 0 4px rgba(246,185,11,.35);animation:pop .5s ease}
+.opt.ok .l{background:var(--gold);color:var(--ink)}
+.opt.no{background:#FFF1EF;border-color:var(--red);border-style:dashed}
+.opt.no .l{background:var(--red-deep)}
+.opt.ok .t::after{content:" ✓ benar";color:var(--gold-deep);font-weight:800}
+.opt.no .t::after{content:" ✗ belum tepat";color:var(--red);font-weight:800}
+.opt[disabled]{cursor:default}
+.bs{grid-template-columns:1fr 1fr}
+.bs .opt{justify-content:center;align-items:center;font-family:var(--font-display);font-size:1.3rem;min-height:68px}
+.hint{color:var(--muted);font-weight:700;margin:0 0 10px}
+
+/* matching */
+.rows{display:grid;gap:8px;margin-bottom:14px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:8px;align-items:stretch}
+.mleft{background:var(--red);color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;display:flex;align-items:center;overflow-wrap:anywhere}
+.mslot{background:#fff;border:3px dashed var(--line);border-radius:14px;padding:8px 10px;text-align:left;font-weight:700;min-height:48px;color:var(--muted);overflow-wrap:anywhere}
+.mslot.act{border-color:var(--gold);background:var(--gold-soft);color:var(--ink)}
+.mslot.fill{border-style:solid;border-color:var(--red);color:var(--ink);background:var(--red-soft)}
+.mslot.ok{border-color:var(--gold);background:var(--gold-soft)}
+.mslot.no{border-color:var(--red);background:#FFF1EF}
+.chips{display:grid;gap:8px}
+.chip{background:#fff;border:3px solid var(--line);border-radius:14px;padding:9px 12px;text-align:left;font-weight:700;display:flex;gap:10px;align-items:flex-start;overflow-wrap:anywhere}
+.chip b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-family:var(--font-display)}
+.chip:hover:not([disabled]){border-color:var(--gold);transform:translateY(-2px)}
+.chip[disabled]{opacity:.4}
+.actions{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.cnt{font-weight:800;color:var(--red-deep)}
+
+/* checklist */
+.chk{display:grid;gap:8px;margin:12px 0}
+.chk label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:3px solid var(--line);border-radius:14px;padding:10px 12px;font-weight:700;cursor:pointer}
+.chk input{width:22px;height:22px;flex:none;accent-color:var(--red);margin-top:2px}
+.key{background:var(--gold-soft);border-radius:16px;padding:12px 14px;margin:12px 0;font-weight:600}
+
+/* feedback */
+.fb{margin-top:18px;background:#fff;border:3px solid var(--gold);border-radius:26px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:12px 14px;align-items:start;animation:rise .4s ease both;box-shadow:0 6px 0 var(--gold-deep)}
+.fb.hug{border-color:var(--red);box-shadow:0 6px 0 var(--red-deep)}
+.bubble h3{font-size:1.3rem;color:var(--red)}
+.bubble p{margin:4px 0 0}
+.chipscore{display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;border-radius:999px;padding:2px 12px;margin-top:6px}
+.exp{grid-column:1/-1;background:var(--paper);border-radius:16px;padding:12px 14px}
+.exp b{color:var(--red-deep)}
+.fb .btn{grid-column:1/-1;justify-self:end}
+
+/* intro + results */
+.intro{text-align:center;padding:28px 20px}
+.intro h2{font-size:1.7rem;margin:8px 0}
+.intro p{max-width:46ch;margin:6px auto 18px}
+.res{text-align:center}
+.big{font-family:var(--font-display);font-weight:700;font-size:4.2rem;line-height:1;color:var(--red);font-variant-numeric:tabular-nums}
+.big small{font-size:1.4rem;color:var(--muted)}
+.bars{display:grid;gap:10px;text-align:left;margin:18px 0}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-weight:800}
+.bar i{grid-column:1/-1;display:block;height:14px;border-radius:999px;background:var(--red-soft);overflow:hidden}
+.bar i b{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:999px;width:0;transition:width 1s ease}
+
+/* mascot */
+.mascot{display:block;overflow:visible}
+.mascot .eh,.mascot .brows,.mascot .beak-open{display:none}
+.mood-happy .en,.mood-hug .eh{display:none}
+.mood-happy .eh,.mood-happy .beak-open{display:block}
+.mood-hug .brows{display:block}
+.mood-happy{animation:hop .6s ease 3}
+.mood-hug{animation:sway 1.3s ease-in-out 2;transform-origin:50% 90%}
+.mood-idle{animation:float 3s ease-in-out infinite}
+.mood-happy .wL{transform-origin:50px 112px;animation:flapL .3s ease 6}
+.mood-happy .wR{transform-origin:150px 112px;animation:flapR .3s ease 6}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-16px) rotate(-3deg)}70%{transform:translateY(0) rotate(3deg)}}
+@keyframes sway{0%,100%{transform:rotate(0)}30%{transform:rotate(-6deg)}70%{transform:rotate(6deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes flapL{50%{transform:rotate(-24deg)}}
+@keyframes flapR{50%{transform:rotate(24deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+@media (max-width:520px){
+  body{font-size:16px}
+  .hero{grid-template-columns:1fr;text-align:center;justify-items:center}
+  .sila-row{justify-content:center}
+  .bs{grid-template-columns:1fr 1fr}
+  .mrow{grid-template-columns:1fr}
+  .fb{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .fb .btn{justify-self:stretch}
+  .exp{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
+<div class="top"><div class="top-in">
+  <div class="brand" id="brand"></div>
+  <div class="score" id="score" aria-live="polite"></div>
+  <button class="tgl" id="tSound" aria-pressed="true" type="button">Musik efek: nyala</button>
+  <button class="tgl" id="tVoice" aria-pressed="true" type="button">Suara ucapan: nyala</button>
+  <div class="prog" role="progressbar" aria-label="Kemajuan kuis" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progWrap"><i id="prog"></i></div>
+</div></div>
+<div class="wrap"><main id="app"></main></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+"use strict";
+/* ===================== DATA SOAL ===================== */
+const STAGES={
+  A:{id:'A',pos:'Pos 1',name:'Pilih Satu Jawaban',from:1,to:20,help:'Baca soal dengan teliti, lalu pilih satu jawaban yang paling tepat.'},
+  B:{id:'B',pos:'Pos 2',name:'Benar atau Salah',from:21,to:25,help:'Baca wacana, lalu tentukan pernyataan itu Benar atau Salah.'},
+  C:{id:'C',pos:'Pos 3',name:'Menjodohkan',from:26,to:30,help:'Ketuk pernyataan di kiri, lalu ketuk pilihan jawaban yang cocok. Ada satu pilihan yang tidak terpakai.'},
+  D:{id:'D',pos:'Pos 4',name:'Pilih 3 Jawaban',from:31,to:35,help:'Pilih tepat 3 jawaban yang benar dari 6 pilihan.'},
+  E:{id:'E',pos:'Pos 5',name:'Isian Singkat',from:36,to:45,help:'Ketik jawaban singkat pada kotak yang tersedia.'},
+  F:{id:'F',pos:'Pos 6',name:'Uraian',from:46,to:50,help:'Tulis jawabanmu, lalu bandingkan dengan kunci dan centang bagian yang sudah kamu tulis dengan benar.'}
+};
+const Q=[];
+const pg=(n,q,o,k,e,x)=>Q.push(Object.assign({n,t:'pg',st:'A',q,o,k,e,max:1},x||{}));
+const bs=(n,c,q,k,e,x)=>Q.push(Object.assign({n,t:'bs',st:'B',c,q,o:['Benar','Salah'],k:k?0:1,e,max:1},x||{}));
+const mt=(n,q,rows,ch,key,e)=>Q.push({n,t:'mt',st:'C',q,rows,ch,key,e,max:3});
+const pk=(n,q,o,key,e,x)=>Q.push(Object.assign({n,t:'pk',st:'D',q,o,key,e,max:3},x||{}));
+const fi=(n,q,ok,model,e)=>Q.push({n,t:'fi',st:'E',q,ok,model,e,max:2});
+const ur=(n,q,pts,model)=>Q.push({n,t:'ur',st:'F',q,pts,model,max:5});
+
+pg(1,'Pada tahun 1945, pemerintah Jepang membentuk sebuah badan untuk menyelidiki usaha-usaha persiapan kemerdekaan Indonesia. Badan tersebut diketuai oleh dr. K.R.T. Radjiman Wedyodiningrat. Badan tersebut bernama ....',['PPKI','BPUPKI','Panitia Sembilan','KNIP'],1,'BPUPKI dibentuk Jepang dan diketuai dr. K.R.T. Radjiman Wedyodiningrat.');
+pg(2,'Pada sidang pertama BPUPK tanggal 29 Mei 1945, seorang tokoh berpidato dan mengusulkan lima dasar negara: Peri Kebangsaan, Peri Kemanusiaan, Peri Ketuhanan, Peri Kerakyatan, dan Kesejahteraan Rakyat. Tokoh yang dimaksud adalah ....',['Ir. Soekarno','Prof. Dr. Soepomo','Mohammad Yamin','Drs. Mohammad Hatta'],2,'Mohammad Yamin berpidato pada 29 Mei 1945. Ir. Soekarno berpidato pada 1 Juni 1945.');
+pg(3,'Pancasila secara resmi ditetapkan sebagai dasar negara oleh PPKI pada tanggal ....',['1 Juni 1945','22 Juni 1945','17 Agustus 1945','18 Agustus 1945'],3,'PPKI menetapkan Pancasila sebagai dasar negara pada 18 Agustus 1945, sehari setelah proklamasi.');
+pg(4,'Alasan utama perubahan rumusan sila pertama tersebut adalah ....',['agar rakyat dari berbagai agama merasa diakui dan persatuan bangsa tetap terjaga','karena rumusan lama terlalu panjang dan sulit dihafal','karena pemerintah Jepang memerintahkan perubahan tersebut','karena sila pertama dianggap kurang penting bagi bangsa'],0,'Rumusan diubah menjadi "Ketuhanan Yang Maha Esa" supaya semua pemeluk agama merasa diakui dan bangsa tetap bersatu.',{c:'Rumusan sila pertama dalam Piagam Jakarta berbunyi "Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya". Menjelang sidang PPKI tanggal 18 Agustus 1945, wakil-wakil dari Indonesia bagian timur menyampaikan keberatan. Setelah berdiskusi, para tokoh sepakat mengubahnya menjadi "Ketuhanan Yang Maha Esa".'});
+pg(5,'Lambang tersebut menggambarkan sila Pancasila yang berbunyi ....',['Ketuhanan Yang Maha Esa','Persatuan Indonesia','Kemanusiaan yang Adil dan Beradab','Keadilan Sosial bagi Seluruh Rakyat Indonesia'],2,'Rantai emas bermata bulat dan persegi melambangkan sila ke-2: Kemanusiaan yang Adil dan Beradab.',{img:'rantai',c:'Perhatikan gambar di atas! Lambang rantai emas ini terdapat pada Garuda Pancasila.'});
+pg(6,'Warga di sebuah desa yang berbeda agama bergotong royong membangun jembatan. Saat waktu ibadah tiba, mereka saling memberi kesempatan untuk beribadah sesuai keyakinan masing-masing. Kegiatan warga tersebut menunjukkan keterhubungan antara ....',['sila ke-1 dan sila ke-3','sila ke-2 dan sila ke-4','sila ke-4 dan sila ke-5','sila ke-1 dan sila ke-4'],0,'Saling menghormati ibadah adalah sila ke-1. Gotong royong membangun jembatan adalah sila ke-3 (persatuan).');
+pg(7,'Setiap hari Minggu pagi, warga RT 03 melakukan kerja bakti membersihkan selokan. Bapak-bapak, ibu-ibu, dan anak-anak bekerja bersama dengan rukun tanpa membeda-bedakan. Kegiatan tersebut sesuai dengan nilai sila ....',['Ketuhanan Yang Maha Esa','Persatuan Indonesia','Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan','Kemanusiaan yang Adil dan Beradab'],1,'Bekerja bersama dengan rukun tanpa membeda-bedakan menunjukkan persatuan, yaitu sila ke-3.');
+pg(8,'Pancasila memiliki dua fungsi penting, yaitu sebagai dasar negara dan sebagai pandangan hidup bangsa. Pernyataan yang menunjukkan fungsi Pancasila sebagai DASAR NEGARA adalah ....',['Ani selalu berkata jujur dalam kehidupan sehari-hari','Keluarga Budi membiasakan bermusyawarah saat mengambil keputusan','Siswa saling menghormati teman yang berbeda suku','Pancasila menjadi sumber dari semua peraturan perundang-undangan di Indonesia'],3,'Sebagai dasar negara, Pancasila menjadi sumber semua peraturan perundang-undangan. Tiga pilihan lain adalah contoh pandangan hidup.');
+pg(9,'Perilaku berikut yang mencerminkan Pancasila sebagai PANDANGAN HIDUP dalam kehidupan sehari-hari adalah ....',['Dika menolong temannya yang jatuh tanpa melihat suku dan agamanya','Pemerintah menyusun undang-undang berdasarkan Pancasila','Lembaga negara menjalankan tugas sesuai konstitusi','Presiden menetapkan peraturan untuk seluruh wilayah negara'],0,'Pandangan hidup berarti Pancasila menjadi pedoman sikap sehari-hari, misalnya menolong teman tanpa membeda-bedakan.');
+pg(10,'Sikap para tokoh perumus Pancasila yang dapat diteladani dari kisah tersebut adalah ....',['mempertahankan hasil kerja sendiri meskipun ditentang banyak orang','mengutamakan kelompok sendiri agar menang dalam sidang','mengutamakan kepentingan bersama di atas kepentingan pribadi','menyerahkan seluruh keputusan kepada orang lain'],2,'Para tokoh rela mengubah rumusan demi persatuan. Itu berarti mengutamakan kepentingan bersama.',{c:'Rumusan Piagam Jakarta disusun melalui kerja keras Panitia Sembilan. Namun, demi menjaga persatuan seluruh bangsa Indonesia, para tokoh perumus, termasuk Ir. Soekarno dan Drs. Mohammad Hatta, bersedia mengubah rumusan sila pertama dalam sidang PPKI.'});
+pg(11,'Dalam diskusi kelompok, Dimas dan Sinta memiliki pendapat yang berbeda tentang tema pentas seni. Sikap teladan pendiri bangsa yang seharusnya ditunjukkan keduanya adalah ....',['memaksa agar pendapatnya diterima oleh kelompok','mendengarkan pendapat satu sama lain dan mencari jalan tengah','meninggalkan diskusi karena pendapatnya ditolak','diam saja dan mengikuti pendapat teman'],1,'Pendiri bangsa menyelesaikan perbedaan dengan saling mendengarkan dan mencari jalan tengah.');
+pg(12,'Aturan atau pedoman bertingkah laku yang berlaku dalam kehidupan bermasyarakat dan wajib ditaati oleh anggotanya disebut ....',['hadiah','kebiasaan pribadi','hobi','norma'],3,'Norma adalah aturan atau pedoman bertingkah laku yang berlaku dan wajib ditaati dalam masyarakat.');
+pg(13,'Pelanggar norma hukum akan dikenai sanksi berupa ....',['dikucilkan dari pergaulan','membayar denda atau dihukum penjara','dicap tidak sopan oleh masyarakat','mendapat dosa'],1,'Sanksi norma hukum bersifat tegas dan resmi dari negara: denda atau hukuman penjara.');
+pg(14,'Pasangan yang tepat antara tindakan dan jenisnya adalah ....',['mendapat buku pelajaran = hak; melaksanakan piket kelas = kewajiban','mendapat buku pelajaran = kewajiban; melaksanakan piket kelas = hak','berangkat tepat waktu = hak; mendapat buku pelajaran = kewajiban','berangkat tepat waktu = hak; melaksanakan piket kelas = hak'],0,'Mendapat buku adalah sesuatu yang kita terima (hak). Melaksanakan piket adalah sesuatu yang harus kita lakukan (kewajiban).',{c:'Rina mendapat buku pelajaran dari sekolah. Ia selalu berangkat tepat waktu dan melaksanakan piket kelas sesuai jadwal.'});
+pg(15,'Setiap bertemu gurunya, Tono selalu mengucapkan salam, tersenyum, dan menyalami guru dengan sopan. Perilaku Tono merupakan penerapan norma ....',['agama','hukum','kesopanan','kesusilaan'],2,'Bersikap sopan kepada guru adalah penerapan norma kesopanan.');
+pg(16,'Di kantin sekolah, semua murid kelas V mengantre dengan tertib menunggu giliran. Tidak ada yang berdesakan dan semua murid terlayani dengan baik. Manfaat penerapan norma tertib seperti pada cerita tersebut adalah ....',['murid yang bertubuh besar dapat dilayani lebih dahulu','waktu istirahat menjadi lebih lama','penjual kantin mendapat keuntungan lebih besar','suasana menjadi tertib, adil, dan semua mendapat giliran'],3,'Antre membuat suasana tertib dan adil karena semua murid mendapat giliran.',{img:'antre'});
+pg(17,'Seorang pengendara sepeda motor menerobos lampu merah di perempatan jalan karena terburu-buru. Dampak negatif yang kemungkinan terjadi dari perbuatan tersebut adalah ....',['pengendara mendapat pujian dari pengguna jalan lain','terjadi kecelakaan dan pengendara dikenai sanksi tilang','lalu lintas menjadi semakin lancar','pengendara lebih dihormati oleh masyarakat'],1,'Menerobos lampu merah bisa menyebabkan kecelakaan, dan pelanggarnya ditilang.',{img:'lampu'});
+pg(18,'Tujuan utama dilaksanakannya musyawarah dalam mengambil keputusan bersama adalah ....',['mencapai kesepakatan bersama yang dapat diterima semua pihak','memenangkan pendapat diri sendiri','mengalahkan pendapat pihak lain','menunjukkan siapa yang paling pandai'],0,'Musyawarah bertujuan mencapai kesepakatan bersama yang diterima semua pihak.');
+pg(19,'Pemilihan ketua kelas V menemui jalan buntu karena Rafi dan Salsa mendapat dukungan yang sama banyak dan tidak ada yang mau mengalah. Langkah penyelesaian yang sesuai dengan prinsip musyawarah mufakat adalah ....',['wali kelas langsung menunjuk salah satu tanpa bertanya kepada murid','murid yang suaranya paling keras dijadikan ketua','berdiskusi kembali dengan mendengarkan alasan masing-masing, lalu mencari kesepakatan bersama','membatalkan pemilihan dan tidak memilih ketua kelas'],2,'Musyawarah mufakat berarti berdiskusi lagi, saling mendengarkan, lalu mencari kesepakatan bersama.');
+pg(20,'Dalam rapat kelas, usulan Bimo tidak dipilih oleh teman-temannya. Sikap lapang dada yang seharusnya ditunjukkan Bimo adalah ....',['marah dan menyalahkan teman-temannya','tidak mau melaksanakan hasil keputusan','meninggalkan kelas sebelum rapat selesai','menerima hasil keputusan dan melaksanakannya dengan ikhlas'],3,'Lapang dada berarti menerima keputusan bersama dan melaksanakannya dengan ikhlas.');
+
+const W1='Menjelang akhir masa penjajahan, pemerintah Jepang membentuk BPUPKI untuk mempersiapkan kemerdekaan Indonesia. Badan ini diketuai oleh dr. K.R.T. Radjiman Wedyodiningrat. Sidang pertama berlangsung dari 29 Mei sampai 1 Juni 1945 untuk membahas dasar negara. Pada 1 Juni 1945, Ir. Soekarno menyampaikan pidato yang mengusulkan lima dasar negara dan menamainya Pancasila. Dasar negara tersebut baru disahkan secara resmi pada sidang PPKI setelah proklamasi kemerdekaan.';
+const W2='Saat jam istirahat, kantin sekolah sangat ramai. Murid-murid kelas V berbaris rapi menunggu giliran membeli makanan. Tiba-tiba Dani datang dan menyerobot ke barisan paling depan karena ia hanya ingin membeli satu permen. Bu Rina, guru piket, menegur Dani dan memintanya kembali ke barisan belakang.';
+bs(21,W1,'Ir. Soekarno mengusulkan lima dasar negara yang dinamai Pancasila dalam pidatonya pada 1 Juni 1945.',true,'Benar. Pidato 1 Juni 1945 menyebut lima dasar negara dengan nama Pancasila.',{});
+bs(22,W1,'Sidang pertama BPUPKI diketuai oleh Ir. Soekarno.',false,'Salah. Ketua BPUPKI adalah dr. K.R.T. Radjiman Wedyodiningrat.',{});
+bs(23,W1,'Tanggal 1 Juni diperingati sebagai Hari Lahir Pancasila.',true,'Benar. Setiap 1 Juni kita memperingati Hari Lahir Pancasila.',{});
+bs(24,W2,'Mengantre adalah kewajiban murid agar semua murid mendapat haknya untuk dilayani secara adil.',true,'Benar. Antre adalah kewajiban supaya hak semua murid untuk dilayani terpenuhi secara adil.',{img:'antre'});
+bs(25,W2,'Dani boleh menyerobot antrean karena barang yang dibelinya hanya sedikit.',false,'Salah. Sedikit atau banyak barang yang dibeli, semua murid tetap wajib antre.',{img:'antre'});
+
+mt(26,'Jodohkan sila Pancasila dengan contoh tindakan yang sesuai!',['Sila ke-1','Sila ke-3','Sila ke-5'],['Mengikuti kerja bakti bersama warga','Berdoa sebelum belajar sesuai agama masing-masing','Membagi tugas piket secara adil kepada semua murid','Menerima keputusan hasil musyawarah'],[1,0,2],'Sila 1: berdoa. Sila 3: kerja bakti bersama. Sila 5: pembagian tugas yang adil. Menerima keputusan musyawarah adalah sila ke-4.');
+mt(27,'Jodohkan fungsi Pancasila sebagai pandangan hidup dengan penjelasannya!',['Pedoman hidup','Pemersatu bangsa','Kepribadian bangsa'],['Ciri khas bangsa Indonesia yang membedakannya dari bangsa lain','Penuntun sikap dan perilaku dalam kehidupan sehari-hari','Pengikat persatuan bangsa yang beragam suku, agama, dan budaya','Sumber dari semua aturan hukum di Indonesia'],[1,2,0],'Pedoman hidup adalah penuntun sikap. Pemersatu adalah pengikat persatuan. Kepribadian adalah ciri khas bangsa. Sumber hukum adalah fungsi dasar negara.');
+mt(28,'Jodohkan norma dengan sumbernya!',['Norma agama','Norma kesusilaan','Norma kesopanan'],['Kebiasaan dan tata krama yang berlaku di masyarakat','Hati nurani manusia','Ajaran Tuhan Yang Maha Esa dalam kitab suci','Peraturan yang dibuat oleh pemerintah'],[2,1,0],'Norma agama bersumber dari ajaran Tuhan, kesusilaan dari hati nurani, kesopanan dari kebiasaan masyarakat.');
+mt(29,'Jodohkan contoh pelanggaran norma dengan sanksi yang sesuai!',['Mencuri sepeda motor milik tetangga','Berkata kasar kepada orang yang lebih tua','Menyontek saat ulangan'],['Dicela dan dianggap tidak sopan oleh masyarakat','Merasa bersalah dan menyesal dalam hati','Ditangkap polisi dan dihukum penjara','Mendapat dosa karena meninggalkan ibadah'],[2,0,1],'Mencuri melanggar hukum, sanksinya penjara. Berkata kasar melanggar kesopanan, sanksinya dicela. Menyontek melanggar kesusilaan, sanksinya rasa bersalah.');
+mt(30,'Jodohkan istilah dalam musyawarah dengan pengertiannya!',['Musyawarah','Mufakat','Voting (pemungutan suara)'],['Kebulatan pendapat bersama yang disetujui oleh semua peserta','Pembahasan bersama untuk memecahkan masalah dan mengambil keputusan','Pengambilan keputusan berdasarkan suara terbanyak','Keputusan yang diambil sepihak oleh pemimpin'],[1,0,2],'Musyawarah adalah membahas bersama. Mufakat adalah kebulatan pendapat. Voting adalah suara terbanyak.');
+
+pk(31,'Sikap yang dapat diteladani dari para pahlawan perumus Pancasila adalah ....',['menghargai pendapat orang lain','mementingkan kelompok sendiri','rela berkorban untuk kepentingan bangsa','memaksakan kehendak kepada orang lain','mengutamakan musyawarah dalam menyelesaikan perbedaan','enggan bekerja sama dengan orang lain'],[0,2,4],'Yang patut diteladani: menghargai pendapat, rela berkorban, dan mengutamakan musyawarah.');
+pk(32,'Perilaku murid di sekolah yang sesuai dengan sila ke-4 Pancasila adalah ....',['memaksa teman memilih calon ketua kelas yang sama dengan pilihannya','menyampaikan pendapat dengan sopan dalam rapat kelas','marah dan menolak hasil keputusan kelas','menerima hasil musyawarah kelas dengan lapang dada','mendengarkan pendapat teman sampai selesai berbicara','mengambil keputusan sendiri tanpa bertanya kepada teman'],[1,3,4],'Sila ke-4 berkaitan dengan musyawarah: berpendapat dengan sopan, mendengarkan, dan menerima hasil dengan lapang dada.');
+pk(33,'Kewajiban murid saat berada di lingkungan sekolah adalah ....',['mengikuti pembelajaran dengan tertib','mendapat pelajaran dari guru','menaati tata tertib sekolah','mendapat perlindungan dari tindak kekerasan','menggunakan fasilitas sekolah untuk belajar','menjaga kebersihan kelas'],[0,2,5],'Kewajiban murid: tertib belajar, menaati tata tertib, dan menjaga kebersihan. Pilihan lain adalah hak murid.');
+pk(34,'Contoh penerapan norma hukum dalam kehidupan bermasyarakat adalah ....',['mengucapkan salam saat bertemu tetangga','berhenti saat lampu lalu lintas berwarna merah','membuang sampah sembarangan','memiliki SIM sebelum mengendarai kendaraan bermotor','memakai helm standar saat mengendarai sepeda motor','berbicara sopan kepada orang yang lebih tua'],[1,3,4],'Norma hukum: berhenti saat lampu merah, memiliki SIM, memakai helm. Salam dan bicara sopan adalah norma kesopanan.');
+pk(35,'Dalam rapat kelas, murid-murid membahas rencana kegiatan perpisahan. Agar musyawarah berjalan baik, tata cara menyampaikan pendapat yang tepat adalah ....',['meminta izin kepada pemimpin rapat sebelum berbicara','memotong pembicaraan teman yang pendapatnya berbeda','menyampaikan pendapat dengan bahasa yang sopan dan jelas','menyertakan alasan yang masuk akal untuk mendukung usul','berteriak agar pendapatnya didengar','membantah usulan teman dengan kata-kata kasar'],[0,2,3],'Cara berpendapat yang baik: minta izin dulu, bahasa sopan dan jelas, serta memberi alasan yang masuk akal.');
+
+const has=(r)=>s=>r.test(s);
+fi(36,'Ketua BPUPKI adalah ........................',has(/rad?jiman/),'dr. K.R.T. Radjiman Wedyodiningrat','Ketua BPUPKI adalah dr. K.R.T. Radjiman Wedyodiningrat.');
+fi(37,'Pada tanggal 22 Juni 1945, Panitia Sembilan menghasilkan rumusan dasar negara yang dikenal dengan nama ........................',has(/piagam\s*jakarta|jakarta\s*charter/),'Piagam Jakarta','Rumusan Panitia Sembilan pada 22 Juni 1945 dikenal sebagai Piagam Jakarta.');
+fi(38,'Sila ke-4 Pancasila dilambangkan dengan kepala ........................',has(/banteng/),'banteng','Kepala banteng melambangkan sila ke-4 yang berkaitan dengan kerakyatan dan musyawarah.');
+fi(39,'Setelah keputusan musyawarah ditetapkan, setiap peserta wajib melaksanakannya dengan penuh ........................',has(/tanggung\s*jawab/),'tanggung jawab','Keputusan bersama harus dilaksanakan dengan penuh tanggung jawab.');
+fi(40,'Para tokoh bangsa rela berkorban demi negara tanpa mengharapkan imbalan. Sikap cinta tanah air seperti ini disebut ........................',has(/patriot|nasionalis/),'patriotisme (nasionalisme juga diterima)','Cinta tanah air yang diwujudkan dengan rela berkorban disebut patriotisme.');
+fi(41,'Norma yang bersumber dari hati nurani manusia disebut norma ........................',has(/kesusilaan|susila/),'kesusilaan','Norma kesusilaan bersumber dari hati nurani manusia.');
+fi(42,'Orang yang melanggar norma hukum akan dikenai sanksi tegas dan resmi dari negara berupa ........................',has(/denda|penjara|hukuman|pidana/),'denda atau hukuman penjara','Sanksi norma hukum berupa denda atau hukuman penjara.');
+fi(43,'Salah satu kewajiban anak di rumah untuk membantu orang tua adalah ........................',has(/menyapu|mengepel|mencuci|merapikan|membereskan|membersihkan|memasak|belanja|menjaga adik|menyiram|membuang sampah|menjemur|melipat|menyetrika/),'jawaban beragam, misalnya menyapu, mencuci piring, atau merapikan tempat tidur','Jawabannya beragam. Contoh: menyapu, mencuci piring, atau merapikan tempat tidur.');
+fi(44,'Jika mufakat tidak tercapai dalam musyawarah, keputusan diambil dengan cara ........................ (suara terbanyak).',has(/voting|vote|pemungutan\s*suara|pemilihan\s*suara/),'voting atau pemungutan suara','Jika mufakat tidak tercapai, keputusan diambil dengan voting atau pemungutan suara.');
+fi(45,'Musyawarah adalah ........................',s=>/bersama|bahas|bicara|berunding|diskusi|rembuk/.test(s)&&/masalah|keputusan|mufakat|kesepakatan|sepakat/.test(s),'pembahasan bersama untuk memecahkan masalah dan mengambil keputusan demi mencapai mufakat','Musyawarah adalah pembahasan bersama untuk memecahkan masalah dan mengambil keputusan demi mencapai mufakat.');
+
+ur(46,'Uraikan secara singkat kronologi proses perumusan Pancasila, mulai dari sidang BPUPKI hingga disahkan oleh PPKI!',['Sidang pertama BPUPKI 29 Mei sampai 1 Juni 1945 (usulan Yamin, Soepomo, Soekarno)','Pidato Soekarno 1 Juni 1945 yang menyebut dasar negara Pancasila','Panitia Sembilan menghasilkan Piagam Jakarta pada 22 Juni 1945','Sidang kedua BPUPKI 10 sampai 17 Juli 1945 membahas rancangan UUD','PPKI pada 18 Agustus 1945 mengesahkan UUD 1945 dan menetapkan Pancasila, dengan sila pertama "Ketuhanan Yang Maha Esa"'],'Sidang I BPUPKI (29 Mei–1 Juni 1945) membahas dasar negara. Soekarno berpidato 1 Juni. Panitia Sembilan menyusun Piagam Jakarta 22 Juni. Sidang II (10–17 Juli) membahas rancangan UUD. PPKI mengesahkan UUD 1945 dan Pancasila pada 18 Agustus 1945.');
+ur(47,'Sebutkan dan jelaskan 3 contoh penerapan sila-sila Pancasila di sekolah! Tuliskan juga sila yang sesuai dengan setiap contoh!',['Contoh pertama tepat','Contoh kedua tepat','Contoh ketiga tepat','Sila yang kutulis benar untuk paling sedikit 1 contoh','Sila yang kutulis benar untuk ketiga contoh'],'Contoh jawaban: berdoa sebelum belajar (sila 1), tidak mengejek teman (sila 2), kerja bakti kelas (sila 3), rapat kelas memilih ketua (sila 4), piket adil untuk semua (sila 5).');
+ur(48,'Bandingkan 4 jenis norma yang berlaku di masyarakat (norma agama, kesusilaan, kesopanan, dan hukum) beserta sumber dan sanksinya!',['Norma agama: bersumber dari ajaran Tuhan, sanksinya dosa','Norma kesusilaan: bersumber dari hati nurani, sanksinya rasa bersalah atau celaan batin','Norma kesopanan: bersumber dari adat dan kebiasaan masyarakat, sanksinya dicela atau dikucilkan','Norma hukum: bersumber dari peraturan negara, sanksinya denda atau penjara','Aku menjelaskan perbedaan keempat norma tersebut'],'Agama: ajaran Tuhan, dosa. Kesusilaan: hati nurani, rasa bersalah. Kesopanan: kebiasaan masyarakat, dicela atau dikucilkan. Hukum: peraturan negara, denda atau penjara.');
+ur(49,'Mengapa pelaksanaan hak dan kewajiban harus seimbang? Analisislah alasannya dan sertakan satu contoh dalam kehidupan sehari-hari di sekolah!',['Hak adalah sesuatu yang diterima, kewajiban adalah sesuatu yang harus dilakukan','Menuntut hak tanpa kewajiban membuat egois dan merugikan orang lain','Kewajiban tanpa hak menimbulkan ketidakadilan','Keseimbangan menciptakan keadilan, ketertiban, dan kerukunan','Ada contoh yang tepat di sekolah'],'Contoh: murid berhak mendapat pelajaran dan wajib mengikuti pelajaran dengan tertib. Jika hanya menuntut hak, kelas tidak tertib dan teman dirugikan.');
+ur(50,'Para pahlawan perumus Pancasila berjuang dengan mengutamakan musyawarah dan persatuan. Berikan 3 contoh sikap meneladani nilai juang para pahlawan tersebut di lingkungan sekolah, lalu jelaskan alasannya!',['Contoh sikap pertama tepat','Contoh sikap kedua tepat','Contoh sikap ketiga tepat','Ada alasan yang mengaitkan sebagian sikap dengan perjuangan pahlawan','Alasan lengkap untuk ketiga sikap'],'Contoh: mau mendengarkan pendapat teman, rela berkorban demi kepentingan kelas, rukun dengan teman yang berbeda latar belakang, menerima hasil musyawarah.');
+
+/* ===================== ILUSTRASI SVG ===================== */
+const ICON={
+  bintang:'<svg width="34" height="34" viewBox="0 0 40 40"><path d="M20 4 L24.4 15 L36 15.8 L27 23.4 L29.8 35 L20 28.6 L10.2 35 L13 23.4 L4 15.8 L15.6 15Z" fill="#F6B90B" stroke="#FFE9A8" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  rantai:'<svg width="34" height="34" viewBox="0 0 40 40" fill="none" stroke="#F6B90B" stroke-width="3.5"><rect x="3" y="14" width="16" height="12" rx="6"/><rect x="14" y="8" width="12" height="24" rx="6" transform="rotate(0)"/><rect x="21" y="14" width="16" height="12" rx="6"/></svg>',
+  beringin:'<svg width="34" height="34" viewBox="0 0 40 40"><rect x="17.5" y="21" width="5" height="14" rx="2" fill="#F6B90B"/><circle cx="20" cy="14" r="9" fill="#FFE9A8"/><circle cx="12" cy="20" r="7" fill="#FFE9A8"/><circle cx="28" cy="20" r="7" fill="#FFE9A8"/></svg>',
+  banteng:'<svg width="34" height="34" viewBox="0 0 40 40"><path d="M7 8 Q3 22 14 22 M33 8 Q37 22 26 22" fill="none" stroke="#F6B90B" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="20" cy="26" rx="10" ry="10.5" fill="#FFE9A8"/><ellipse cx="20" cy="31" rx="6" ry="4" fill="#F6B90B"/><circle cx="15.5" cy="23.5" r="1.8" fill="#3F1219"/><circle cx="24.5" cy="23.5" r="1.8" fill="#3F1219"/></svg>',
+  padi:'<svg width="34" height="34" viewBox="0 0 40 40"><path d="M16 36 Q13 22 16 6" fill="none" stroke="#F6B90B" stroke-width="2.5" stroke-linecap="round"/><g fill="#F6B90B"><ellipse cx="12" cy="12" rx="2.4" ry="4.5" transform="rotate(-25 12 12)"/><ellipse cx="20" cy="14" rx="2.4" ry="4.5" transform="rotate(25 20 14)"/><ellipse cx="12" cy="21" rx="2.4" ry="4.5" transform="rotate(-25 12 21)"/><ellipse cx="20" cy="23" rx="2.4" ry="4.5" transform="rotate(25 20 23)"/></g><g fill="#fff"><circle cx="29" cy="14" r="4.5"/><circle cx="32" cy="21" r="4.5"/><circle cx="27" cy="27" r="4.5"/></g></svg>'
+};
+function ill(name){
+  if(name==='rantai'){
+    let links='';for(let i=0;i<5;i++){const x=20+i*52;links+=(i%2===0)?`<rect x="${x}" y="28" width="62" height="34" rx="17" fill="none" stroke="#F6B90B" stroke-width="9"/>`:`<rect x="${x+10}" y="20" width="42" height="50" rx="20" fill="none" stroke="#FFD84D" stroke-width="9"/>`;}
+    return `<svg width="320" height="90" viewBox="0 0 320 90" role="img" aria-label="Gambar rantai emas bermata bulat dan persegi"><rect width="320" height="90" rx="20" fill="#8F111E"/>${links}</svg>`;
+  }
+  if(name==='lampu'){
+    return `<svg width="320" height="150" viewBox="0 0 320 150" role="img" aria-label="Gambar lampu lalu lintas menyala merah"><rect width="320" height="150" rx="20" fill="#FFE9A8"/><rect x="40" y="10" width="76" height="130" rx="22" fill="#3F1219"/><circle cx="78" cy="38" r="18" fill="#FF3B3B"/><circle cx="78" cy="38" r="26" fill="none" stroke="#FF3B3B" stroke-opacity=".35" stroke-width="6"/><circle cx="78" cy="78" r="18" fill="#6B4A00"/><circle cx="78" cy="116" r="18" fill="#2F4A2F"/><g transform="translate(160 40)"><rect x="0" y="40" width="120" height="14" rx="7" fill="#8F111E"/><circle cx="22" cy="60" r="16" fill="none" stroke="#3F1219" stroke-width="7"/><circle cx="98" cy="60" r="16" fill="none" stroke="#3F1219" stroke-width="7"/><path d="M26 40 L50 14 L80 14 L98 44" fill="none" stroke="#D4202E" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="62" cy="2" r="10" fill="#B97B00"/></g></svg>`;
+  }
+  if(name==='antre'){
+    let p='';const cols=['#D4202E','#F6B90B','#8F111E','#F6B90B','#D4202E'];
+    for(let i=0;i<5;i++){const x=30+i*48;p+=`<circle cx="${x}" cy="78" r="13" fill="#B97B00"/><rect x="${x-15}" y="94" width="30" height="40" rx="14" fill="${cols[i]}"/>`;}
+    return `<svg width="320" height="150" viewBox="0 0 320 150" role="img" aria-label="Gambar murid mengantre rapi di kantin"><rect width="320" height="150" rx="20" fill="#FFE9A8"/><rect x="262" y="40" width="44" height="94" rx="10" fill="#8F111E"/><rect x="256" y="34" width="56" height="12" rx="6" fill="#F6B90B"/>${p}<path d="M16 138 H250" stroke="#B97B00" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round"/></svg>`;
+  }
+  return '';
+}
+function mascot(mood,size){
+  return `<svg class="mascot mood-${mood}" width="${size}" height="${size}" viewBox="0 0 200 200" role="img" aria-label="Garuda Kecil, maskot kuis">
+  <g class="wL"><path d="M50 100 Q4 112 14 164 Q46 156 62 130Z" fill="#8F111E"/><path d="M14 164 Q30 158 36 146 M26 134 Q40 130 44 122" fill="none" stroke="#F6B90B" stroke-width="5" stroke-linecap="round"/></g>
+  <g class="wR"><path d="M150 100 Q196 112 186 164 Q154 156 138 130Z" fill="#8F111E"/><path d="M186 164 Q170 158 164 146 M174 134 Q160 130 156 122" fill="none" stroke="#F6B90B" stroke-width="5" stroke-linecap="round"/></g>
+  <path d="M88 44 Q80 16 94 6 Q98 26 102 42Z" fill="#F6B90B"/><path d="M98 42 Q100 12 114 4 Q116 28 108 44Z" fill="#FFD84D"/><path d="M106 46 Q118 22 134 22 Q128 40 114 50Z" fill="#F6B90B"/>
+  <ellipse cx="100" cy="112" rx="62" ry="64" fill="#D4202E"/>
+  <ellipse cx="100" cy="132" rx="40" ry="42" fill="#FFE9A8"/>
+  <path d="M78 122 Q88 130 98 122 M102 122 Q112 130 122 122 M90 140 Q100 148 110 140" fill="none" stroke="#F6B90B" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="68" cy="106" rx="9" ry="6" fill="#FF8A80" opacity=".7"/><ellipse cx="132" cy="106" rx="9" ry="6" fill="#FF8A80" opacity=".7"/>
+  <g class="en"><circle cx="78" cy="90" r="15" fill="#fff"/><circle cx="122" cy="90" r="15" fill="#fff"/><circle cx="80" cy="92" r="8" fill="#3F1219"/><circle cx="120" cy="92" r="8" fill="#3F1219"/><circle cx="83" cy="88" r="3" fill="#fff"/><circle cx="123" cy="88" r="3" fill="#fff"/></g>
+  <g class="eh" fill="none" stroke="#3F1219" stroke-width="6" stroke-linecap="round"><path d="M64 94 Q78 76 92 94"/><path d="M108 94 Q122 76 136 94"/></g>
+  <g class="brows" stroke="#3F1219" stroke-width="5" stroke-linecap="round"><path d="M62 76 L92 68"/><path d="M108 68 L138 76"/></g>
+  <path d="M90 104 L110 104 L100 120Z" fill="#F59E0B"/>
+  <path class="beak-open" d="M92 119 Q100 134 108 119Z" fill="#B45309"/>
+  <ellipse cx="80" cy="176" rx="16" ry="8" fill="#F6B90B"/><ellipse cx="120" cy="176" rx="16" ry="8" fill="#F6B90B"/>
+  </svg>`;
+}
+const LOGO='<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#F6B90B"/><path d="M20 7 L24 16 L33.5 16.8 L26.3 23 L28.6 32.5 L20 27.4 L11.4 32.5 L13.7 23 L6.5 16.8 L16 16Z" fill="#D4202E"/></svg>';
+const STAR='<svg width="20" height="20" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L25 15 L38 16 L28 25 L31 38 L20 31 L9 38 L12 25 L2 16 L15 15Z" fill="#F6B90B"/></svg>';
+
+/* ===================== SUARA ===================== */
+const state={name:'',sound:true,voice:true,list:[],idx:0,res:{},answered:false,intro:{},mode:'all'};
+let actx=null;
+function ac(){try{if(!actx){const C=window.AudioContext||window.webkitAudioContext;if(C)actx=new C();}if(actx&&actx.state==='suspended')actx.resume();}catch(e){}return actx;}
+function tone(f,t0,d,type,vol){const c=ac();if(!c)return;try{const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.value=f;const t=c.currentTime+t0;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.2,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.05);}catch(e){}}
+function sfx(kind){
+  if(!state.sound)return;
+  if(kind==='win'){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,i*.09,.35,'triangle',.22));tone(1568,.42,.3,'sine',.12);tone(2093,.5,.4,'sine',.09);}
+  else if(kind==='hug'){[392,440,523.25].forEach((f,i)=>tone(f,i*.2,.6,'sine',.2));tone(659.25,.62,.7,'sine',.12);}
+  else if(kind==='click'){tone(660,0,.08,'sine',.12);}
+  else if(kind==='fanfare'){[523.25,659.25,783.99,1046.5,783.99,1046.5,1318.5].forEach((f,i)=>tone(f,i*.14,.4,'triangle',.22));}
+  else if(kind==='stage'){[587.33,739.99,880].forEach((f,i)=>tone(f,i*.1,.3,'triangle',.18));}
+}
+function say(t){
+  if(!state.voice||!('speechSynthesis' in window))return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='id-ID';u.rate=1;u.pitch=1.25;const v=(speechSynthesis.getVoices()||[]).find(v=>/^id/i.test(v.lang));if(v)u.voice=v;setTimeout(()=>{try{speechSynthesis.speak(u)}catch(e){}},500);}catch(e){}
+}
+const PUJI=['Hebat! Jawabanmu benar!','Pintar sekali!','Mantap, kamu keren!','Luar biasa, pertahankan ya!','Bagus sekali, bintang untukmu!'];
+const SEMANGAT=['Tidak apa-apa, ayo coba lagi nanti!','Semangat ya, kamu pasti bisa!','Jangan menyerah, belajar itu seru!','Ayo lanjut, kamu pasti makin pintar!','Setiap kesalahan membuatmu makin pintar!'];
+const SEBAGIAN=['Sedikit lagi! Sudah ada yang benar, hebat!','Hampir sempurna! Terus semangat ya!'];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ===================== EFEK ===================== */
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');let parts=[],raf=0;
+function fit(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
+addEventListener('resize',fit);fit();
+function burst(kind){
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const n=reduce?0:(kind==='big'?220:kind==='win'?110:18);
+  for(let i=0;i<n;i++){
+    if(kind==='hug'){parts.push({k:'star',x:Math.random()*innerWidth,y:innerHeight+10,vx:(Math.random()-.5)*.8,vy:-(1.2+Math.random()*1.6),g:-0.004,r:8+Math.random()*8,a:1,rot:Math.random()*6,life:150});}
+    else{const c=['#D4202E','#F6B90B','#FFD84D','#FFFFFF','#8F111E'][Math.floor(Math.random()*5)];const ox=kind==='big'?Math.random()*innerWidth:innerWidth/2;parts.push({k:'sq',c,x:ox,y:kind==='big'?-10:innerHeight*.35,vx:(Math.random()-.5)*(kind==='big'?4:11),vy:kind==='big'?Math.random()*3:-(4+Math.random()*8),g:.28,r:5+Math.random()*6,a:1,rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:kind==='big'?200:100});}
+  }
+  if(!raf)raf=requestAnimationFrame(loop);
+}
+function star(x,y,r,rot){cx.beginPath();for(let i=0;i<10;i++){const a=rot+i*Math.PI/5,rr=i%2?r*.45:r;cx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}cx.closePath();cx.fill();}
+function loop(){
+  cx.clearRect(0,0,innerWidth,innerHeight);
+  parts=parts.filter(p=>p.life>0);
+  for(const p of parts){p.life--;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr||.03;p.a=Math.min(1,p.life/40);cx.globalAlpha=p.a;
+    if(p.k==='star'){cx.fillStyle='#F6B90B';star(p.x,p.y,p.r,p.rot);}else{cx.fillStyle=p.c;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillRect(-p.r/2,-p.r/3,p.r,p.r*.66);cx.restore();}}
+  cx.globalAlpha=1;
+  raf=parts.length?requestAnimationFrame(loop):0;
+}
+
+/* ===================== UTIL ===================== */
+const $=s=>document.querySelector(s);
+const app=$('#app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s).toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+const L='ABCDEF';
+const total=()=>state.list.reduce((a,q)=>a+q.max,0);
+const earned=()=>Object.values(state.res).reduce((a,r)=>a+r.s,0);
+const who=()=>state.name||'Sahabat Pancasila';
+function header(){
+  $('#brand').innerHTML=LOGO+'<span>Petualangan Pancasila</span>';
+  const done=Object.keys(state.res).length,n=state.list.length||1;
+  const pct=Math.round(done/n*100);
+  $('#prog').style.width=pct+'%';$('#progWrap').setAttribute('aria-valuenow',pct);
+  $('#score').innerHTML=STAR+'<span>'+earned()+' poin</span>';
+}
+function scrollTop(){window.scrollTo({top:0,behavior:'smooth'});}
+
+/* ===================== LAYAR: BERANDA ===================== */
+function home(){
+  state.list=[];state.res={};state.intro={};state.idx=0;header();
+  const sil=['bintang','rantai','beringin','banteng','padi'].map((k,i)=>`<span title="Sila ke-${i+1}">${ICON[k]}</span>`).join('');
+  const stg=Object.values(STAGES).map(s=>`<button class="stg" type="button" data-stage="${s.id}"><b>${s.pos}: ${s.name}</b><small>Soal ${s.from}–${s.to}</small></button>`).join('');
+  app.innerHTML=`
+  <section class="hero">
+    <div>${mascot('idle',130)}</div>
+    <div>
+      <h1>Petualangan <em>Pancasila</em></h1>
+      <p>Halo! Aku Garuda Kecil. Ayo jawab 50 soal Pendidikan Pancasila kelas V bersamaku. Jawaban benar dapat sorak, jawaban belum tepat dapat semangat!</p>
+      <div class="sila-row" aria-label="Lambang kelima sila">${sil}</div>
+    </div>
+  </section>
+  <section class="panel">
+    <h2>Siapa namamu?</h2>
+    <label class="f" for="nm">Tulis namamu agar aku bisa menyapamu</label>
+    <input class="inp" id="nm" maxlength="30" autocomplete="off" placeholder="Contoh: Aisyah" value="${esc(state.name)}">
+    <div class="row" style="margin-top:14px"><button class="btn btn-gold" id="go" type="button">Mulai Petualangan</button><span class="hint" style="margin:0">50 soal, 6 pos, nilai maksimal 100</span></div>
+  </section>
+  <section class="panel">
+    <h2>Atau latihan per pos</h2>
+    <div class="stages">${stg}</div>
+  </section>`;
+  $('#go').onclick=()=>{state.name=$('#nm').value.trim();ac();sfx('click');start('all');};
+  $('#nm').addEventListener('keydown',e=>{if(e.key==='Enter')$('#go').click();});
+  app.querySelectorAll('[data-stage]').forEach(b=>b.onclick=()=>{state.name=$('#nm').value.trim();ac();sfx('click');start(b.dataset.stage);});
+}
+function start(mode){
+  state.mode=mode;state.res={};state.intro={};state.idx=0;
+  state.list=mode==='all'?Q.slice():Q.filter(q=>q.st===mode);
+  header();show();
+}
+
+/* ===================== LAYAR: SOAL ===================== */
+function needIntro(q){const i=state.idx;return !state.intro[q.st]&&(i===0||state.list[i-1].st!==q.st);}
+function show(){
+  const q=state.list[state.idx];state.answered=false;scrollTop();
+  if(needIntro(q)){
+    const s=STAGES[q.st];
+    sfx('stage');
+    app.innerHTML=`<section class="panel intro" style="animation:rise .4s ease both">${mascot('happy',110)}<h2>${s.pos}: ${s.name}</h2><p>${esc(s.help)}</p><button class="btn btn-gold" id="ok" type="button">Ayo mulai!</button></section>`;
+    $('#ok').onclick=()=>{state.intro[q.st]=true;sfx('click');show();};
+    return;
+  }
+  const s=STAGES[q.st];
+  const pic=q.img?`<div class="pic">${ill(q.img)}</div>`:'';
+  const ctx=q.c?`<p class="ctx">${esc(q.c)}</p>`:'';
+  const nb=q.t==='bs'?'Nyatakan: Benar atau Salah?':'';
+  app.innerHTML=`
+  <section>
+    <div class="qhead"><span class="badge">${s.pos} · ${s.name}</span><span class="qno">Soal ${q.n} dari 50</span></div>
+    <article class="card">
+      ${pic}${ctx}
+      ${q.t==='bs'?'<p class="hint">'+nb+'</p>':''}
+      <h2 class="qtext">${esc(q.q)}</h2>
+      <div id="ans"></div>
+    </article>
+    <div id="fb"></div>
+  </section>`;
+  ({pg:bodyChoice,bs:bodyChoice,mt:bodyMatch,pk:bodyMulti,fi:bodyFill,ur:bodyEssay})[q.t](q,$('#ans'));
+}
+
+function bodyChoice(q,box){
+  const isBs=q.t==='bs';
+  box.innerHTML=`<div class="opts ${isBs?'bs':''}">${q.o.map((t,i)=>`<button class="opt" type="button" data-i="${i}"><span class="l">${isBs?(i===0?'✓':'✗'):L[i]}</span><span class="t">${esc(t)}</span></button>`).join('')}</div>`;
+  const bt=[...box.querySelectorAll('.opt')];
+  bt.forEach(b=>b.onclick=()=>{
+    if(state.answered)return;ac();
+    const i=+b.dataset.i;bt.forEach(x=>x.disabled=true);
+    bt[q.k].classList.add('ok');if(i!==q.k)b.classList.add('no');
+    resolve(q,i===q.k?1:0,'');
+  });
+}
+
+function bodyMatch(q,box){
+  const sel=new Array(q.rows.length).fill(-1);let act=0;let checked=false;
+  function draw(){
+    box.innerHTML=`<p class="hint">Ketuk baris di kiri, lalu ketuk pilihan jawaban.</p>
+    <div class="rows">${q.rows.map((r,i)=>`<div class="mrow"><div class="mleft">${i+1}. ${esc(r)}</div><button type="button" class="mslot ${checked?(sel[i]===q.key[i]?'ok':'no'):(sel[i]>=0?'fill':'')} ${(!checked&&act===i)?'act':''}" data-r="${i}" ${checked?'disabled':''}>${sel[i]>=0?esc(q.ch[sel[i]]):'(pilih jawaban)'}${checked?(sel[i]===q.key[i]?' ✓':' ✗'):''}</button></div>`).join('')}</div>
+    <div class="chips">${q.ch.map((c,i)=>`<button type="button" class="chip" data-c="${i}" ${(checked||sel.includes(i))?'disabled':''}><b>${L[i]}</b><span>${esc(c)}</span></button>`).join('')}</div>
+    <div class="actions"><button class="btn btn-red" id="chk" type="button" ${(checked||sel.includes(-1))?'disabled':''}>Periksa jawaban</button></div>`;
+    box.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{ac();const r=+b.dataset.r;sel[r]=-1;act=r;draw();});
+    box.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ac();sfx('click');sel[act]=+b.dataset.c;const nx=sel.findIndex(v=>v<0);act=nx<0?act:nx;draw();});
+    const c=$('#chk');if(c)c.onclick=()=>{if(state.answered)return;checked=true;const sc=sel.reduce((a,v,i)=>a+(v===q.key[i]?1:0),0);draw();
+      const wrong=sel.map((v,i)=>v===q.key[i]?null:`${i+1}. ${q.rows[i]} → ${L[q.key[i]]}. ${q.ch[q.key[i]]}`).filter(Boolean);
+      resolve(q,sc,wrong.length?'<b>Jodoh yang tepat:</b><br>'+wrong.map(esc).join('<br>'):'');};
+  }
+  draw();
+}
+
+function bodyMulti(q,box){
+  const sel=new Set();let done=false;
+  function draw(){
+    box.innerHTML=`<p class="hint">Pilih tepat 3 jawaban.</p><div class="opts">${q.o.map((t,i)=>{
+      let cls=sel.has(i)?'sel':'';if(done){if(q.key.includes(i))cls='ok';else if(sel.has(i))cls='no';else cls='';}
+      return `<button class="opt ${cls}" type="button" data-i="${i}" ${done?'disabled':''} aria-pressed="${sel.has(i)}"><span class="l">${L[i]}</span><span class="t">${esc(t)}</span></button>`;}).join('')}</div>
+    <div class="actions"><span class="cnt">Dipilih ${sel.size} dari 3</span><button class="btn btn-red" id="chk" type="button" ${(done||sel.size!==3)?'disabled':''}>Periksa jawaban</button></div>`;
+    box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;ac();const i=+b.dataset.i;if(sel.has(i))sel.delete(i);else if(sel.size<3){sel.add(i);sfx('click');}draw();});
+    const c=$('#chk');if(c)c.onclick=()=>{if(state.answered)return;done=true;const sc=[...sel].filter(i=>q.key.includes(i)).length;draw();resolve(q,sc,'');};
+  }
+  draw();
+}
+
+function bodyFill(q,box){
+  box.innerHTML=`<label class="f" for="fa">Jawabanmu</label><input class="inp" id="fa" autocomplete="off" placeholder="Ketik jawabanmu di sini"><div class="actions"><button class="btn btn-red" id="chk" type="button">Periksa jawaban</button></div>`;
+  const inp=$('#fa');
+  const go=()=>{if(state.answered)return;ac();const v=inp.value.trim();if(!v){inp.focus();return;}inp.disabled=true;$('#chk').disabled=true;
+    const ok=q.ok(norm(v));resolve(q,ok?2:0,`<b>Jawabanmu:</b> ${esc(v)}<br><b>Jawaban yang tepat:</b> ${esc(q.model)}`);};
+  $('#chk').onclick=go;inp.addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+}
+
+function bodyEssay(q,box){
+  box.innerHTML=`<label class="f" for="ea">Tulis jawabanmu</label><textarea class="inp" id="ea" placeholder="Tulis jawabanmu dengan kalimat yang runtut"></textarea><div class="actions"><button class="btn btn-red" id="peek" type="button">Lihat kunci dan periksa sendiri</button></div><div id="self"></div>`;
+  $('#peek').onclick=()=>{ac();sfx('click');$('#peek').disabled=true;$('#ea').readOnly=true;
+    $('#self').innerHTML=`<div class="key"><b>Contoh jawaban:</b> ${esc(q.model)}</div><p class="hint">Centang bagian yang sudah kamu tulis dengan benar. Jujur ya, tiap centang bernilai 1 poin.</p><div class="chk">${q.pts.map((p,i)=>`<label><input type="checkbox" data-p="${i}"><span>${esc(p)}</span></label>`).join('')}</div><div class="actions"><button class="btn btn-gold" id="fin" type="button">Selesai memeriksa</button></div>`;
+    $('#fin').onclick=()=>{if(state.answered)return;const sc=app.querySelectorAll('.chk input:checked').length;app.querySelectorAll('.chk input').forEach(x=>x.disabled=true);$('#fin').disabled=true;resolve(q,sc,'');};
+  };
+}
+
+/* ===================== UMPAN BALIK ===================== */
+function resolve(q,score,detail){
+  if(state.answered)return;state.answered=true;
+  state.res[q.n]={s:score,m:q.max};header();
+  const full=score===q.max,part=score>0&&!full;
+  const line=full?pick(PUJI):(part?pick(SEBAGIAN):pick(SEMANGAT));
+  const title=full?(q.max>1?'Sempurna, '+who()+'!':'Benar, '+who()+'!'):(part?'Sedikit lagi, '+who()+'!':'Ayo semangat, '+who()+'!');
+  sfx(full?'win':'hug');burst(full?'win':'hug');say(line);
+  const last=state.idx===state.list.length-1;
+  $('#fb').innerHTML=`<div class="fb ${full?'':'hug'}" role="status">
+    ${mascot(full?'happy':'hug',92)}
+    <div class="bubble"><h3>${esc(title)}</h3><p>${esc(line)}</p><span class="chipscore">+${score} dari ${q.max} poin</span></div>
+    <div class="exp">${detail?detail+'<br>':''}<b>Pembahasan:</b> ${esc(q.e||'')}</div>
+    <button class="btn btn-gold" id="nx" type="button">${last?'Lihat hasilku':'Lanjut'}</button></div>`;
+  const nx=$('#nx');nx.onclick=()=>{sfx('click');try{speechSynthesis.cancel()}catch(e){}if(last)results();else{state.idx++;show();}};
+  setTimeout(()=>{const f=$('#fb');if(f)f.scrollIntoView({behavior:'smooth',block:'nearest'});nx.focus({preventScroll:true});},60);
+}
+
+/* ===================== HASIL ===================== */
+function results(){
+  const tot=total(),got=earned();const pct=Math.round(got/tot*100);
+  const grade=pct>=90?['Juara Pancasila','Luar biasa! Kamu menguasai hampir semuanya.']:pct>=75?['Bintang Emas','Bagus sekali! Sedikit lagi menuju juara.']:pct>=60?['Pahlawan Muda','Kamu sudah baik. Ayo ulangi pos yang belum sempurna.']:['Calon Pahlawan','Jangan menyerah! Belajar lagi, lalu coba kembali ya.'];
+  const stages=[...new Set(state.list.map(q=>q.st))];
+  const bars=stages.map(id=>{const qs=state.list.filter(q=>q.st===id);const m=qs.reduce((a,q)=>a+q.max,0);const s=qs.reduce((a,q)=>a+(state.res[q.n]?state.res[q.n].s:0),0);return `<div class="bar"><span>${STAGES[id].pos}: ${STAGES[id].name}</span><span>${s} / ${m}</span><i><b data-w="${Math.round(s/m*100)}"></b></i></div>`;}).join('');
+  const stars=pct>=90?3:pct>=75?2:1;
+  const medal=`<svg width="120" height="130" viewBox="0 0 120 130" role="img" aria-label="Medali ${grade[0]}"><path d="M34 0 L58 50 L40 54 L16 6Z" fill="#8F111E"/><path d="M86 0 L62 50 L80 54 L104 6Z" fill="#D4202E"/><circle cx="60" cy="82" r="40" fill="#F6B90B" stroke="#B97B00" stroke-width="5"/><circle cx="60" cy="82" r="30" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="3 5"/><path d="M60 62 L66 77 L82 78 L70 88 L74 104 L60 95 L46 104 L50 88 L38 78 L54 77Z" fill="#D4202E"/></svg>`;
+  const sm=Array.from({length:3},(_,i)=>`<svg width="30" height="30" viewBox="0 0 40 40" style="margin:0 3px;opacity:${i<stars?1:.25}"><path d="M20 3 L25 15 L38 16 L28 25 L31 38 L20 31 L9 38 L12 25 L2 16 L15 15Z" fill="#F6B90B"/></svg>`).join('');
+  scrollTop();
+  app.innerHTML=`<section class="card res"><div class="row" style="justify-content:center;gap:6px">${medal}${mascot('happy',110)}</div>
+    <h2 style="margin-top:6px">${esc(grade[0])}, ${esc(who())}!</h2><div>${sm}</div>
+    <p>${esc(grade[1])}</p>
+    <div class="big"><span id="cnt">0</span><small> / ${tot}</small></div>
+    <div class="bars">${bars}</div>
+    <div class="row" style="justify-content:center"><button class="btn btn-gold" id="again" type="button">Main lagi</button><button class="btn btn-line" id="menu" type="button">Pilih pos latihan</button></div></section>`;
+  const line=pct>=60?'Selamat '+who()+'! Nilaimu '+got+'. Kamu hebat!':'Terima kasih sudah berjuang, '+who()+'. Nilaimu '+got+'. Ayo belajar lagi, kamu pasti bisa!';
+  sfx(pct>=60?'fanfare':'hug');burst(pct>=60?'big':'hug');say(line);
+  let n=0;const el=$('#cnt');const iv=setInterval(()=>{n=Math.min(got,n+Math.max(1,Math.round(got/40)));el.textContent=n;if(n>=got)clearInterval(iv);},30);
+  setTimeout(()=>app.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%'),80);
+  $('#again').onclick=()=>{ac();sfx('click');start(state.mode);};
+  $('#menu').onclick=()=>{sfx('click');home();};
+}
+
+/* ===================== KONTROL SUARA ===================== */
+$('#tSound').onclick=function(){state.sound=!state.sound;this.setAttribute('aria-pressed',state.sound);this.textContent='Musik efek: '+(state.sound?'nyala':'mati');ac();if(state.sound)sfx('click');};
+$('#tVoice').onclick=function(){state.voice=!state.voice;this.setAttribute('aria-pressed',state.voice);this.textContent='Suara ucapan: '+(state.voice?'nyala':'mati');if(!state.voice){try{speechSynthesis.cancel()}catch(e){}}else say('Suara ucapan menyala.');};
+try{if('speechSynthesis' in window)speechSynthesis.getVoices();}catch(e){}
+home();
+</script>
+
+</body></html>
